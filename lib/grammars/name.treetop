@@ -1,0 +1,167 @@
+grammar Name
+
+  rule full_name
+	first_name_last_name / no_first_name  / first_name_only  {
+	      def value
+	        # nasty nasty kludge - I feel so dirty
+			if respond_to?(:text_value)
+			  [[:first_name, text_value]]
+			else
+			  elements.map{ |e| e.value if e.respond_to?(:value) }
+			 end
+	      end
+	    }
+  end
+
+  rule first_name_only
+    first_name {
+	  def value
+	    [:first_name, text_value]
+	  end
+	}
+  end
+
+  rule first_name_last_name
+    optional_title first_name s middle_name last_name {
+	      def value
+	        elements.map{ |e| e.value }
+	      end
+	    }
+  end
+
+  rule no_first_name
+    title last_name {
+	      def value
+	        elements.map{ |e| e.value }
+	      end
+	    }
+  end
+
+  rule first_name
+    word {
+	  def value
+	    [:first_name, text_value]
+	  end
+	}
+  end
+
+  rule middle_name
+    (word s)* {
+	  def value
+	    [:middle_name, text_value]
+	  end
+	}
+  end
+
+  rule last_name
+    word {
+	  def value
+	    [:last_name, text_value]
+	  end
+	}
+  end
+
+  rule optional_title
+	(title_word s)* {
+	  def value
+	    [:title, text_value] unless text_value.blank?
+	  end
+	}
+  end
+
+  rule title
+	(title_word s)+ {
+	  def value
+	    [:title, text_value] unless text_value.blank?
+	  end
+	}
+  end
+
+  rule title_word
+    dotted_title_word / 
+    "of " word /
+	"Revd" /		   	"revd" /
+	"Eminence" /        "eminence" /
+	"Holiness" /        "holiness" /
+	"All" /             "all" /
+	"Highness" /        "highness" /
+	"Beatitude" /       "beatitude" /
+	"Excellency" /      "excellency" /
+	"Mr" /              "mr" / 
+	"Dr" /              "dr" / 
+	"Miss" /            "miss" / 
+	"Madam" /           "madam" /
+	"Mrs" /             "mrs" / 
+	"Reverend" /        "reverend" /
+	"Rev" /             "rev" / 
+	"Very" /            "very" /
+	"Monsignor" /       "monsignor" /
+	"Mgr" /             "mgr" /
+	"Professor" /       "professor" / 
+	"Prof" /            "prof" / 
+	"Bishop" /          "bishop" / 
+	"Right" /           "right" /
+	"Sir" /             "sir" / 
+	"Rt" /              "rt" / 
+	"Honourable" /      "honourable" /
+	"Hon" /             "hon" / 
+	"The" /             "the" / 
+	"Ms" /              "ms" /
+	"Fr" /              "fr" /
+	"M" /               "m" /
+	"Master" /          "master" /
+	"Lord" /            "lord" / 
+	"Lady" /            "lady" / 
+	"Most" /            "most" / 
+	"Marchioness" /     "marchioness" /
+	"King" /            "king" /
+	"Queen" /           "queen" /
+	"Venerable" /       "venerable" /
+	"His" /             "his" /
+	"Her" /             "her" /
+	"Grace" /           "grace" / 
+	"Rabbi" /           "rabbi" / 
+	"Most" /            "most" /
+	"Sister" /          "sister" /
+	"Mister" /          "mister" /
+	"Mother" /          "mother" /
+	"Mo" /              "mo" /
+	"Canon" /           "canon" /
+	"And" /           	"and" 
+  end
+
+  rule dotted_title_word
+    [\w]+ "." {
+	  def value
+	    text_value
+	  end
+	}
+  end
+
+  rule ending
+	s "MD" {
+	  def value
+	    [:ending, text_value] unless text_value.blank?
+	  end
+	}
+  end
+
+  rule word
+    [^\s]+ {
+	  def value
+	    text_value
+	  end
+	}
+  end
+
+  rule s
+    [\s]+ {
+	  def value
+	    ""
+	  end
+	}
+  end
+
+end
+
+

@@ -1,0 +1,8 @@
+h1. Full names
+
+Full name parsing using Treetop.
+
+Usage:
+
+<pre><code>  >> FullNames.parse("The Right Reverend and Right Honourable the Lord Bishop of London Richard John Carew Chartres")
+  => {:title=>"The Right Reverend and Right Honourable the Lord Bishop of London", :first_name=>"Richard", :middle_name=>"John Carew", :last_name=>"Chartres"}</pre></code>

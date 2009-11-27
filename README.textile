@@ -1,4 +1,4 @@
-h1. Full names
+h1. LordBishop
 
 Full name parsing using Treetop.
 

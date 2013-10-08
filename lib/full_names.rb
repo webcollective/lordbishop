@@ -9,7 +9,7 @@ module FullNames
       return false unless name.is_a?(String)
       
       parser = NameParser.new
-      result = parser.parse(name)
+      result = parser.parse(name.strip.mb_chars)
       result_hash = {}
       result.value.each do |node|
         result_hash[node[0]] = node[1].strip if node.is_a?(Array) && !node[1].blank?
